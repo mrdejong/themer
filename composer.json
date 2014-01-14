@@ -1,6 +1,17 @@
 {
     "name": "mrdejong/themer",
-    "description": "",
+    "description": "Theme package for laravel 4",
+    "version": "1.0.0-dev",
+    "type": "laravel-package",
+    "keywords": [
+        "laravel",
+        "laravel 4",
+        "laravel 4.1",
+        "theme",
+        "themes",
+        "theming"
+    ],
+    "license": "MIT",
     "authors": [
         {
             "name": "Alexander de Jong (mrdejong)",
