@@ -27,11 +27,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		// First register our stuff!
 		$this->app->bindShared('themer', function($app)
 		{
-			$t = new Themer($app);
+			$themer = new Themer($app);
 
-			$t->boot();
+			$themer->boot();
 
-			return $t;
+			return $themer;
 		});
 
 		//$this->app->resolve('themer.themer');
