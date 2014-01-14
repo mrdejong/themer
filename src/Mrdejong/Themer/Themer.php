@@ -45,7 +45,7 @@ class Themer {
 
 		$theme_info = array();
 
-		$dirs = glob($themes_paths . '/*');
+		$dirs = glob($themes_path . '/*');
 		
 		foreach($dirs as $dir)
 		{
@@ -61,7 +61,7 @@ class Themer {
 			}
 
 			// Filter out the theme name.
-			$name = str_replace($themes_path, '', $dir);
+			$name = str_replace($themes_path . '/', '', $dir);
 
 			$this->themes[$name] = new Theme($name, $dir, $theme_info);
 		}
