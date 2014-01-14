@@ -11,6 +11,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		parent::__construct($app);
 	}
 
+	public function boot()
+	{
+		$this->package('mrdejong/themer');
+	}
+
 	/**
 	 * Override the parent's register function
 	 * to add our own functionality!
