@@ -1,6 +1,5 @@
 <?php namespace Mrdejong\Themer;
 
-// use Illuminate\Support\ServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\View\FileViewFinder;
 use Illuminate\View\ViewServiceProvider;
