@@ -58,5 +58,14 @@ return array(
 	 * !!Alert!! If this is set to false, themer won't check for
 	 * the required info parameters listed in the 'required_info' option.
 	 */
-	'require_info_file'		=> true
+	'require_info_file'		=> true,
+
+	/**
+	 * Should themer cache it's themes list?
+	 *
+	 * Side node, if themer dectects that your environment
+	 * is in development mode then we won't cache and
+	 * ignore this option.
+	 */
+	'cache_themes_list'		=> true,
 );

@@ -6,11 +6,11 @@ use Illuminate\View\FileViewFinder;
 use Illuminate\View\ViewServiceProvider;
 
 class ThemerServiceProvider extends ViewServiceProvider {
-	public function __construct(Application $app)
-	{
-		parent::__construct($app);
-	}
-
+	/**
+	 * Put on a package name!
+	 * 
+	 * @return void
+	 */
 	public function boot()
 	{
 		$this->package('mrdejong/themer');
@@ -33,8 +33,6 @@ class ThemerServiceProvider extends ViewServiceProvider {
 
 			return $themer;
 		});
-
-		//$this->app->resolve('themer.themer');
 
 		// Let the parent do the it's work too!
 		parent::register();

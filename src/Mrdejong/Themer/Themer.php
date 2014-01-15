@@ -15,6 +15,12 @@ class Themer {
 	 */
 	private $app;
 
+	/**
+	 * Contains a stack of validated themes.
+	 * 
+	 * [String] => Mrdejong\Themer\Theme
+	 * @var array
+	 */
 	private $themes = array();
 
 	public function __construct(Application $app)
@@ -36,37 +42,16 @@ class Themer {
 		if (Cache::has('themer.themes'))
 		{
 			$this->themes = Cache::get('themer.themes');
-			return; 
 		}
-
-		$themes_path 			= Config::get('themer::themer.themes_path'); // Location to the themes folder.
-		$validate_info 			= Config::get('themer::themer.validate_info'); // Boolean wheter to check the info array.
-		$require_info_file 		= Config::get('themer::themer.require_info_file'); // Boolean wheter to check for an info file.
-
-		$theme_info = array();
-
-		$dirs = glob($themes_path . '/*');
-		
-		foreach($dirs as $dir)
+		else
 		{
-			if($require_info_file)
-			{
-				if(!file_exists($dir . '/info.php'))
-					break; // Lets just not at the theme to the stack.
+			$this->loadThemes();
 
-				$theme_info = include $dir . '/info.php';
+			$cache_me = Config::get('themer::themer.cache_themes_list');
 
-				if($validate_info && !$this->validateInfoParameters($theme_info))
-					break;
-			}
-
-			// Filter out the theme name.
-			$name = str_replace($themes_path . '/', '', $dir);
-
-			$this->themes[$name] = new Theme($name, $dir, $theme_info);
+			if($cache_me)
+				Cache::put('themer.themes', $this->themes, Carbon::now()->addMinutes(10));
 		}
-
-		Cache::put('themer.themes', $this->themes, Carbon::now()->addMinutes(10));
 	}
 
 	/**
@@ -99,6 +84,11 @@ class Themer {
 		return (isset($this->themes[$name])) ? $this->themes[$name] : null;
 	}
 
+	/**
+	 * Validates the info.php file, located in each theme.
+	 * @param  array  $info Contents of the info.php file.
+	 * @return boolean
+	 */
 	protected function validateInfoParameters(array $info)
 	{
 		$required_info = Config::get('themer::themer.required_info'); // Array with the required info parameters.
@@ -113,5 +103,40 @@ class Themer {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Load the themes and add theme after validation to the stack.
+	 * @return void
+	 */
+	protected function loadThemes()
+	{
+		$themes_path 			= Config::get('themer::themer.themes_path'); // Location to the themes folder.
+		$validate_info 			= Config::get('themer::themer.validate_info'); // Boolean wheter to check the info array.
+		$require_info_file 		= Config::get('themer::themer.require_info_file'); // Boolean wheter to check for an info file.
+
+		$theme_info = array();
+
+		$dirs = glob($themes_path . '/*');
+		
+		foreach($dirs as $dir)
+		{
+			if($require_info_file)
+			{
+				if(!file_exists($dir . '/info.php'))
+					break; // Lets just not at the theme to the stack.
+
+				$theme_info = include $dir . '/info.php';
+
+				if($validate_info && !$this->validateInfoParameters($theme_info))
+					break;
+			}
+
+			// Filter out the theme name.
+			$name = str_replace($themes_path . '/', '', $dir);
+
+			// Theme is valid, add it to the stack
+			$this->themes[$name] = new Theme($name, $dir, $theme_info);
+		}
 	}
 }
