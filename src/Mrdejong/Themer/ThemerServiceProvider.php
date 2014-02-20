@@ -3,8 +3,12 @@
 use Illuminate\Foundation\Application;
 use Illuminate\View\FileViewFinder;
 use Illuminate\View\ViewServiceProvider;
+use Illuminate\View\ViewFinderInterface;
+use Illuminate\Support\ServiceProvider;
 
-class ThemerServiceProvider extends ViewServiceProvider {
+class ThemerServiceProvider extends ViewServiceProvider { 
+	protected $defer = false;
+
 	/**
 	 * Put on a package name!
 	 * 
@@ -13,6 +17,8 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	public function boot()
 	{
 		$this->package('mrdejong/themer');
+
+		include __DIR__.'/../../filters.php';
 	}
 
 	/**
@@ -23,17 +29,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function register()
 	{
-		// First register our stuff!
 		$this->app->bindShared('themer', function($app)
 		{
-			$themer = new Themer($app);
-
-			$themer->boot();
-
-			return $themer;
+			return new Themer($app);
 		});
 
-		// Let the parent do the it's work too!
 		parent::register();
 	}
 
@@ -46,14 +46,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	{
 		$this->app->bindShared('view.finder', function($app)
 		{
-			$theme = $app['themer']->getActiveTheme();
 
-			$vanilla_paths = $app['config']['view.paths'];
-			$themes_paths = array($theme->getViewLocation());
+			$view_paths = $app['config']['view.paths'];
 
-			$paths = array_merge($themes_paths, $vanilla_paths);
-
-			return new FileViewFinder($app['files'], $paths);
+			return new ThemeViewFinder($app['files'], $view_paths);
 		});
+
 	}
 }

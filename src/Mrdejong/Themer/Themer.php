@@ -1,6 +1,7 @@
 <?php namespace Mrdejong\Themer;
 
 use Illuminate\Foundation\Application;
+use Illuminate\View\FileViewFinder;
 
 use Cache;
 use Config;
@@ -23,35 +24,14 @@ class Themer {
 	 */
 	private $themes = array();
 
+	private $themeActivationForced = false;
+
+	private $activeTheme;
+
 	public function __construct(Application $app)
 	{
 		$this->app = $app;
-	}
-
-	/**
-	 * Boot up all the themes, and validate them.
-	 *
-	 * Also check if there listed in the database.
-	 *
-	 * This function will be called in the service provider. So don't worry about it!
-	 * 
-	 * @return void
-	 */
-	public function boot()
-	{
-		if (Cache::has('themer.themes'))
-		{
-			$this->themes = Cache::get('themer.themes');
-		}
-		else
-		{
-			$this->loadThemes();
-
-			$cache_me = Config::get('themer::themer.cache_themes_list');
-
-			if($cache_me)
-				Cache::put('themer.themes', $this->themes, Carbon::now()->addMinutes(10));
-		}
+		$this->activeThemes = new ActiveThemes();
 	}
 
 	/**
@@ -61,14 +41,35 @@ class Themer {
 	 */
 	public function getActiveTheme()
 	{
-		$priority = \Config::get('themer::themer.active_theme_priority');
+		foreach($this->activeThemes->toArray() as $theme)
+		{
+			if ($theme->isForced())
+			{
+				return $theme;
+			}
+		}
+
+		$priority = Config::get('themer::themer.active_theme_priority');
 
 		switch ($priority)
 		{
 			case -1:
 				// In this case, we going for the active theme defined in our configuration file.
-				$active_theme = \Config::get('themer::themer.active_theme');
-				return $this->themes[$active_theme];
+				$active_theme = Config::get('themer::themer.active_theme');
+				$theme = $this->getTheme($active_theme);
+				$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+				return $theme;
+			break;
+
+			default:
+				if(isset($this->activeTheme))
+					return $this->getTheme($this->activeTheme);
+
+				if ($active_theme = Config::get('themer::themer.active_theme') && $theme = $this->getTheme($active_theme))
+					return $theme;
+
+				// No active theme!
+				return "laravel_view_system";
 			break;
 		}
 	}
@@ -81,7 +82,47 @@ class Themer {
 	 */
 	public function getTheme($name)
 	{
-		return (isset($this->themes[$name])) ? $this->themes[$name] : null;
+		$location = with(new ThemeFinder())->find($name);
+
+		return  new Theme($name, $location);
+	}
+
+	/**
+	 * Get all the themes
+	 *
+	 * @return  Array[Theme]
+	 */
+	public function getThemes()
+	{
+		$paths = glob(Config::get("themer::themer.themes_path") . '/*');
+
+		$results = array();
+
+		foreach(glob($paths) as $path)
+		{
+			$name = str_replace(Config::get("themer::themer.themes_path"), "", $path);
+
+			$results[] = new Theme($name, $path);
+		}
+
+		return $results;
+	}
+
+	/**
+	 * Activate a theme.
+	 * @param  string  $name
+	 * @param  boolean $force
+	 * @return void
+	 */
+	public function activate($name, $force = false)
+	{
+		$theme = $this->getTheme($name);
+		
+		$theme->setForced($force);
+
+		$this->activeThemes->prepend($theme);
+
+		$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
 	}
 
 	/**
@@ -103,40 +144,5 @@ class Themer {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Load the themes and add theme after validation to the stack.
-	 * @return void
-	 */
-	protected function loadThemes()
-	{
-		$themes_path 			= Config::get('themer::themer.themes_path'); // Location to the themes folder.
-		$validate_info 			= Config::get('themer::themer.validate_info'); // Boolean wheter to check the info array.
-		$require_info_file 		= Config::get('themer::themer.require_info_file'); // Boolean wheter to check for an info file.
-
-		$theme_info = array();
-
-		$dirs = glob($themes_path . '/*');
-		
-		foreach($dirs as $dir)
-		{
-			if($require_info_file)
-			{
-				if(!file_exists($dir . '/info.php'))
-					break; // Lets just not at the theme to the stack.
-
-				$theme_info = include $dir . '/info.php';
-
-				if($validate_info && !$this->validateInfoParameters($theme_info))
-					break;
-			}
-
-			// Filter out the theme name.
-			$name = str_replace($themes_path . '/', '', $dir);
-
-			// Theme is valid, add it to the stack
-			$this->themes[$name] = new Theme($name, $dir, $theme_info);
-		}
 	}
 }

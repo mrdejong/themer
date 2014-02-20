@@ -50,7 +50,7 @@ return array(
 	/**
 	 * If set to false, themer won't check the required_info option.
 	 */
-	'validate_info'			=> true,
+	'validate_info'			=> false,
 
 	/**
 	 * Should a theme be required to have a info file?
@@ -60,12 +60,8 @@ return array(
 	 */
 	'require_info_file'		=> true,
 
-	/**
-	 * Should themer cache it's themes list?
-	 *
-	 * Side node, if themer dectects that your environment
-	 * is in development mode then we won't cache and
-	 * ignore this option.
-	 */
-	'cache_themes_list'		=> true,
+	'database_loader'		=> array(
+		'table_name'			=> "",
+		'column_name_name'		=> "",
+	)
 );

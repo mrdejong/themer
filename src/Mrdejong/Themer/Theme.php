@@ -1,9 +1,13 @@
 <?php namespace Mrdejong\Themer;
 
+use Config;
+use Mrdejong\Themer\Model\Theme as ThemeModel;
+
 class Theme {
 	private $name;
 	private $location;
 	private $info;
+	private $forced = false;
 
 	/**
 	 * Construct Theme. This should be done in Themer.php when booting up.
@@ -12,11 +16,49 @@ class Theme {
 	 * @param string $location
 	 * @param array  $info
 	 */
-	public function __construct($name, $location, $info)
+	public function __construct($name, $location)
 	{
 		$this->name = $name;
 		$this->location = $location;
-		$this->info = $info;
+		$infoFile = $location . '/info.php';		
+
+		if(Config::get('themer::themer.require_info_file') && !file_exists($infoFile))
+		{
+			throw new Exception("Placeholder: Mrdejong\Themer\Theme.php 1st exception, function __construct");
+		}
+
+		$this->info = $this->validateInfo(include $infoFile);
+	}
+
+	public function install()
+	{
+		if ($this->isInstalled())
+			return;
+
+		$theme = new ThemeModel;
+
+		$theme->name = $this->name;
+		$theme->info = json_encode($this->info);
+
+		if (isset($this->info['parent']))
+		{
+			$parent = Themer::getTheme($this->info['parent']);
+
+			if (!$parent->isInstalled())
+				$parent->install();
+
+
+		}
+	}
+
+	public function isInstalled()
+	{
+		return (ThemeModel::where('name', '=', $this->name)->count() > 0)) ? true : false;
+	}
+
+	public function getModel()
+	{
+		return ThemeModel::where('name', '=', $this->name)->get();
 	}
 
 	/**
@@ -27,6 +69,33 @@ class Theme {
 	public function getViewLocation()
 	{
 		return $this->location . '/views';
+	}
+
+	public function validateInfo(array $info)
+	{
+		if (!Config::get("themer::themer.validate_info"))
+			return $info;
+
+		foreach(Config::get("themer::themer.required_info") as $key => $value)
+		{
+			if ($value)
+			{
+				if (!array_key_exists($key, $info))
+					throw new Exception("Placeholder: Mrdejong\Themer\Theme.php 2nd exception. Function: validateInfo");
+			}
+		}
+
+		return $info;
+	}
+
+	public function setForced($force = false)
+	{
+		$this->forced = $force;
+	}
+
+	public function isForced()
+	{
+		return $this->forced;
 	}
 
 	/**
