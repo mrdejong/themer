@@ -6,11 +6,11 @@
  * This will enable the user to activate a theme per route.
  *
  * @usage
- * array('before' => 'theme:themename,[optional]force it') 
+ * array('before' => 'theme:themename,true') 
  */
-Route::filter('theme', function($route, $requiest, $name, $force = false)
+Route::filter('theme', function($route, $request, $name, $force = false)
 {
-	Themer::activate($name, (bool)$force);
+	// Themer::activate($name, (bool)$force);
 });
 
 App::before(function($request)
