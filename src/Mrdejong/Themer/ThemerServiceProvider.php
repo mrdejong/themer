@@ -46,10 +46,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	{
 		$this->app->bindShared('view.finder', function($app)
 		{
-
-			$view_paths = $app['config']['view.paths'];
-
-			return new ThemeViewFinder($app['files'], $view_paths);
+			return new ThemeViewFinder($app['files'], $app['config']['view.paths']);
 		});
 
 	}
