@@ -5,9 +5,6 @@ use Illuminate\View\FileViewFinder;
 class ThemeViewFinder extends FileViewFinder {
 	public function prependPath($path)
 	{
-		$paths = $this->paths;
-		$path = array($path);
-
-		$this->paths = array_merge($path, $paths);
+		$this->paths = array_merge(array($path), $this->paths);
 	}
 }
