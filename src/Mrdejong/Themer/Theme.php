@@ -37,7 +37,6 @@ class Theme {
 		$theme = new ThemeModel;
 
 		$theme->name = $this->name;
-		//$theme->info = json_encode($this->info);
 
 		if (isset($this->info['parent']))
 		{
@@ -46,7 +45,7 @@ class Theme {
 			if (!$parent->isInstalled())
 				$parent->install();
 
-
+			$theme->parent = $parent;
 		}
 
 		$theme->save();
@@ -59,7 +58,7 @@ class Theme {
 
 	public function getModel()
 	{
-		return ThemeModel::where('name', '=', $this->name)->get();
+		return ThemeModel::where('name', '=', $this->name)->first();
 	}
 
 	/**
@@ -110,6 +109,18 @@ class Theme {
 			return $this->info[$key];
 
 		return null;
+	}
+
+	public function activate()
+	{
+		if (!$this->isInstalled())
+			$this->install();
+
+		\Themer::deactivateAll();
+
+		$model = $this->getModel();
+		$model->active = true;
+		$model->save();
 	}
 
 	/**

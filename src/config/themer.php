@@ -25,7 +25,7 @@ return array(
 	 * 1 - The one wich will be provided by an user. (In this case you 
 	 * 	   should configure the 'users' part in this configuration file).
 	 */
-	'active_theme_priority'	=> -1,
+	'active_theme_priority'	=> 0,
 
 	/**
 	 * Everytheme should be packaged with a info.php file.

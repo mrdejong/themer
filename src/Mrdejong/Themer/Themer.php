@@ -44,6 +44,9 @@ class Themer {
 	{
 		$theme = $this->getActiveTheme();
 
+		if ($theme === "laravel_view_system")
+			return;
+
 		if ($autoinstall && !$theme->isInstalled())
 		{
 			$theme->install();
@@ -62,24 +65,27 @@ class Themer {
 	 */
 	public function getActiveTheme()
 	{
-		foreach($this->activeThemes->toArray() as $theme)
-		{
-			if ($theme->isForced())
-			{
-				return $theme;
-			}
-		}
+		$priority = (int) Config::get('themer::themer.active_theme_priority');
 
-		$priority = Config::get('themer::themer.active_theme_priority');
-
-		switch ((int)$priority)
+		switch ($priority)
 		{
 			case -1:
 				// In this case, we going for the active theme defined in our configuration file.
 				$active_theme = Config::get('themer::themer.active_theme');
 				$theme = $this->getTheme($active_theme);
-				// $this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+				
 				return $theme;
+			break;
+
+			case 0:
+				foreach ($this->getThemes() as $theme)
+				{
+					var_dump($theme->isInstalled());
+					if ($theme->isInstalled() && $theme->getModel()->active)
+						return $theme;
+				}
+
+				return "laravel_view_system";
 			break;
 
 			default:
@@ -119,9 +125,10 @@ class Themer {
 
 		$results = array();
 
-		foreach(glob($paths) as $path)
+		foreach($paths as $path)
 		{
 			$name = str_replace(Config::get("themer::themer.themes_path"), "", $path);
+			$name = str_replace('/', '', $name);
 
 			$results[] = new Theme($name, $path);
 		}
@@ -144,6 +151,24 @@ class Themer {
 		$this->activeThemes->prepend($theme);
 
 		$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+	}
+
+	/**
+	 * Deactive all themes in the database.
+	 */
+	public function deactivateAll()
+	{
+		foreach($this->getThemes() as $theme)
+		{
+			if ($theme->isInstalled())
+			{
+				$model = $theme->getModel();
+
+				$model->active = false;
+
+				$model->save();
+			}
+		}
 	}
 
 	/**
