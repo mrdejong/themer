@@ -19,6 +19,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		$this->package('mrdejong/themer');
 
 		include __DIR__.'/../../filters.php';
+		include __DIR__.'/../../routes.php';
 	}
 
 	/**

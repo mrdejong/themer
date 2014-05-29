@@ -13,9 +13,10 @@ Route::filter('theme', function($route, $request, $name, $force = false)
 	// Themer::activate($name, (bool)$force);
 });
 
-Route::get('themer/activate/{theme}', function($theme) {
-	$theme = Themer::getTheme($theme);
-	$theme->activate();
+Route::filter('is_ajax', function($route, $request)
+{
+	if (!Request::ajax())
+		return App::abort(404);
 });
 
 App::before(function($request)

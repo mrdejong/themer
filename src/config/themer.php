@@ -72,9 +72,6 @@ return array(
 	 * This is handy in an ajax based backend application.
 	 * 
 	 * This way you only have to provide the front-end functionallity.
-	 * 
-	 * Make sure that the url configuration setting in `/app/config/app.php` is set
-	 * to the actual working url.
 	 */
-	'enable_api_routes'		=> false
+	'enable_api_routes'		=> true
 );

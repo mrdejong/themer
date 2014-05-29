@@ -117,9 +117,7 @@ class Themer {
 	 */
 	public function getTheme($name)
 	{
-		$location = with(new ThemeFinder())->find($name);
-
-		return  new Theme($name, $location);
+		return  new Theme($name);
 	}
 
 	/**
@@ -135,8 +133,7 @@ class Themer {
 
 		foreach($paths as $path)
 		{
-			$name = str_replace(Config::get("themer::themer.themes_path"), "", $path);
-			$name = str_replace('/', '', $name);
+			$name = basename($path);
 
 			$results[] = new Theme($name, $path);
 		}

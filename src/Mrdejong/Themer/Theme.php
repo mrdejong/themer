@@ -36,7 +36,7 @@ class Theme {
 	public function __construct($name, $location = "")
 	{
 		$this->name = $name;
-		$this->location = realpath(\Config::get('Themer::themer.themes_path') . '/' . $name);
+		$this->location = realpath(with(new ThemeFinder())->find($name));
 		$infoFile = $location . '/info.php';		
 
 		if(Config::get('themer::themer.require_info_file') && !file_exists($infoFile))
@@ -158,6 +158,26 @@ class Theme {
 		$model = $this->getModel();
 		$model->active = true;
 		$model->save();
+	}
+
+	/**
+	 * Gets the name of the theme.
+	 * 
+	 * @return string 		The theme name
+	 */
+	public function getName()
+	{
+		return $this->name;
+	}
+
+	/**
+	 * Get the info of the theme.
+	 * 
+	 * @return array 		The info provided the themes info.php file
+	 */
+	public function getInfo()
+	{
+		return $this->info;
 	}
 
 	/**
