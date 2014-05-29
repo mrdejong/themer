@@ -63,5 +63,18 @@ return array(
 	'database_loader'		=> array(
 		'table_name'			=> "",
 		'column_name_name'		=> "",
-	)
+	),
+
+	/**
+	 * Themer provides a build-in ajax api to activate/deactivate themes.
+	 * It also gives functionallity to get information of themes.
+	 * 
+	 * This is handy in an ajax based backend application.
+	 * 
+	 * This way you only have to provide the front-end functionallity.
+	 * 
+	 * Make sure that the url configuration setting in `/app/config/app.php` is set
+	 * to the actual working url.
+	 */
+	'enable_api_routes'		=> false
 );
