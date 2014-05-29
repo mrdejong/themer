@@ -27,7 +27,7 @@ You can close your composer.json file, and open up the app.php file located in `
 'Illuminate\View\ViewServiceProvider',
 ```
 
-You want to command that line of code, since Themer's service provider extends from the ViewServiceProvider.
+You want to comment that line of code, since Themer's service provider extends from the ViewServiceProvider.
 
 Now add the following line of code to the same array as the ViewServiceProvider
 ```php
@@ -53,3 +53,10 @@ Since themer is in its early state of development, I'm going to add documentatio
 Thanks for reading this readme and  ignore my rich mistakes in this language!
 
 Have fun with themer, and watch out for new and super cool updates!
+
+### License
+Since this project is under development I will not allow commercial use for the time being.
+
+[![license](http://i.creativecommons.org/l/by-nc/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc/4.0/)
+
+Themer by Alexander de Jong is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
