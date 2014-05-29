@@ -80,10 +80,9 @@ class Themer {
 			case 0:
 				foreach ($this->getThemes() as $theme)
 				{
-					var_dump($theme->isInstalled());
 					if ($theme->isInstalled() && $theme->getModel()->active)
 						return $theme;
-				}
+				}				
 
 				return "laravel_view_system";
 			break;

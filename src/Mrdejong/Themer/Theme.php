@@ -3,23 +3,40 @@
 use Config;
 use Mrdejong\Themer\Model\Theme as ThemeModel;
 
+/**
+ * This is a class wrapper for a single theme.
+ */
 class Theme {
+	/**
+	 * Contains the directory name of the theme.
+	 */
 	private $name;
-	private $location;
+
+	/**
+	 * Contains the location to the theme.
+	 */
+ 	private $location;
+
+ 	/**
+ 	 * Contains the info.php array (if availible)
+ 	 */
 	private $info = array();
+
+	/**
+	 * Is the theme forced to activate and take priority over every other active theme.
+	 */
 	private $forced = false;
 
 	/**
 	 * Construct Theme. This should be done in Themer.php when booting up.
 	 * 
-	 * @param string $name
-	 * @param string $location
-	 * @param array  $info
+	 * @param string 	The name of the theme (usually the directory name the theme is located in)
+	 * @param string 	The location to the theme (deprecated)
 	 */
-	public function __construct($name, $location)
+	public function __construct($name, $location = "")
 	{
 		$this->name = $name;
-		$this->location = $location;
+		$this->location = realpath(\Config::get('Themer::themer.themes_path') . '/' . $name);
 		$infoFile = $location . '/info.php';		
 
 		if(Config::get('themer::themer.require_info_file') && !file_exists($infoFile))
@@ -29,6 +46,9 @@ class Theme {
 			$this->info = $this->validateInfo(include $infoFile);
 	}
 
+	/**
+	 * Register the theme in the database.
+	 */
 	public function install()
 	{
 		if ($this->isInstalled())
@@ -51,11 +71,21 @@ class Theme {
 		$theme->save();
 	}
 
+	/**
+	 * Check if the theme is registered in the database.
+	 * 
+	 * @return boolean 		true if the theme is registered in the database, false if not.
+	 */
 	public function isInstalled()
 	{
 		return (ThemeModel::where('name', '=', $this->name)->count() > 0) ? true : false;
 	}
 
+	/**
+	 * Get the model for the theme.
+	 * 
+	 * @return Mrdejong\Themer\Model\Theme 
+	 */
 	public function getModel()
 	{
 		return ThemeModel::where('name', '=', $this->name)->first();
@@ -64,13 +94,20 @@ class Theme {
 	/**
 	 * Get the location to the views folder.
 	 * 
-	 * @return string
+	 * @return string 		The location of the view files
 	 */
 	public function getViewLocation()
 	{
 		return $this->location . '/views';
 	}
 
+	/**
+	 * Validates the info.php file.
+	 * 
+	 * @param array 		The array of that info.php returns.
+	 * @throws Exception 
+	 * @return array 		Returns the exact same array as the input
+	 */
 	public function validateInfo(array $info)
 	{
 		if (!Config::get("themer::themer.validate_info"))
@@ -88,29 +125,29 @@ class Theme {
 		return $info;
 	}
 
+	/**
+	 * Set or unset forcing the theme.
+	 * 
+	 * @param boolean 		True to force the theme
+	 */
 	public function setForced($force = false)
 	{
 		$this->forced = $force;
 	}
 
+	/**
+	 * Check if the theme is forced
+	 * 
+	 * @return boolean 		True if the theme is forced
+	 */
 	public function isForced()
 	{
 		return $this->forced;
 	}
 
 	/**
-	 * Get an variable from the info.php file.
-	 * 
-	 * @return mixed
+	 * Activate the theme
 	 */
-	public function __get($key)
-	{
-		if (isset($this->info[$key]))
-			return $this->info[$key];
-
-		return null;
-	}
-
 	public function activate()
 	{
 		if (!$this->isInstalled())
@@ -124,10 +161,23 @@ class Theme {
 	}
 
 	/**
+	 * Get an variable from the info.php file.
+	 * 
+	 * @return mixed 		Can be any type.
+	 */
+	public function __get($key)
+	{
+		if (isset($this->info[$key]))
+			return $this->info[$key];
+
+		return null;
+	}
+
+	/**
 	 * Magic function for isset. Checks if a variable in info.php exists.
 	 * 
-	 * @param  string  $key
-	 * @return boolean
+	 * @param  string  		The variable you want to check
+	 * @return boolean		if set returns true
 	 */
 	public function __isset($key)
 	{
