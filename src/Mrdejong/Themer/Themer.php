@@ -12,7 +12,7 @@ use Carbon\Carbon;
  */
 class Themer {
 	/**
-	 * @var Illuminate\Foundation\Application
+	 * Contains the laravel application instance
 	 */
 	private $app;
 
@@ -23,10 +23,6 @@ class Themer {
 	 * @var array
 	 */
 	private $themes = array();
-
-	private $themeActivationForced = false;
-
-	private $activeTheme;
 
 	public function __construct(Application $app)
 	{
@@ -59,6 +55,22 @@ class Themer {
 	}
 
 	/**
+	 * Reboot the view paths. This will prefend unwanted to be providing views.
+	 * 
+	 * @param boolean 		Clear the view paths array in the viewfinder.
+	 */
+	public function reboot($clearViewPaths = false)
+	{
+		$finder = $this->app['view']->getFinder();
+		$theme = $this->getActiveTheme();
+
+		if ($clearViewPaths)
+			$finder->resetPaths();
+
+		$finder->prependPath($theme->getViewLocation());
+	}
+
+	/**
 	 * Get the active theme.
 	 * 
 	 * @return Mrdejong\Themer\Theme
@@ -88,22 +100,19 @@ class Themer {
 			break;
 
 			default:
-				if(isset($this->activeTheme))
-					return $this->getTheme($this->activeTheme);
-
-				if ($active_theme = Config::get('themer::themer.active_theme') && $theme = $this->getTheme($active_theme))
-					return $theme;
 
 				// No active theme!
 				return "laravel_view_system";
 			break;
 		}
+
+		return "laravel_view_system";
 	}
 
 	/**
 	 * Get a theme.
 	 * 
-	 * @param  string $name The name of the theme you want to get.
+	 * @param  string 		The name of the theme you want to get.
 	 * @return Theme
 	 */
 	public function getTheme($name)
@@ -137,19 +146,18 @@ class Themer {
 
 	/**
 	 * Activate a theme.
-	 * @param  string  $name
-	 * @param  boolean $force
+	 * @param  string  		The name of the theme
+	 * @param  boolean 		Force activation
 	 * @return void
 	 */
 	public function activate($name, $force = false)
 	{
 		$theme = $this->getTheme($name);
 		
+		$theme->activate();
 		$theme->setForced($force);
 
-		$this->activeThemes->prepend($theme);
-
-		$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+		$this->reboot(true);
 	}
 
 	/**
@@ -172,7 +180,7 @@ class Themer {
 
 	/**
 	 * Validates the info.php file, located in each theme.
-	 * @param  array  $info Contents of the info.php file.
+	 * @param  array  		Contents of the info.php file.
 	 * @return boolean
 	 */
 	protected function validateInfoParameters(array $info)
