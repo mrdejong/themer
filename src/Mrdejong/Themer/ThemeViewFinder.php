@@ -7,4 +7,9 @@ class ThemeViewFinder extends FileViewFinder {
 	{
 		$this->paths = array_merge(array($path), $this->paths);
 	}
+
+	public function resetPaths()
+	{
+		$this->paths = \Config::get('view.paths');
+	}
 }
