@@ -58,7 +58,7 @@ return array(
 	 * !!Alert!! If this is set to false, themer won't check for
 	 * the required info parameters listed in the 'required_info' option.
 	 */
-	'require_info_file'		=> true,
+	'require_info_file'		=> false,
 
 	'database_loader'		=> array(
 		'table_name'			=> "",

@@ -15,5 +15,5 @@ Route::filter('theme', function($route, $request, $name, $force = false)
 
 App::before(function($request)
 {
-
+	Themer::boot($request, true);
 });

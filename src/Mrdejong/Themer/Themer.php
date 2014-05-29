@@ -35,6 +35,27 @@ class Themer {
 	}
 
 	/**
+	 * Boot up themer, this method will be called in `filter.php`
+	 * inside the App::before callback.
+	 * 
+	 * @param Illuminate\Http\Request $request
+	 */
+	public function boot(\Illuminate\Http\Request $request, $autoinstall = false)
+	{
+		$theme = $this->getActiveTheme();
+
+		if ($autoinstall && !$theme->isInstalled())
+		{
+			$theme->install();
+		}
+
+		if ($theme->isInstalled())
+		{
+			$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+		}
+	}
+
+	/**
 	 * Get the active theme.
 	 * 
 	 * @return Mrdejong\Themer\Theme
@@ -51,13 +72,13 @@ class Themer {
 
 		$priority = Config::get('themer::themer.active_theme_priority');
 
-		switch ($priority)
+		switch ((int)$priority)
 		{
 			case -1:
 				// In this case, we going for the active theme defined in our configuration file.
 				$active_theme = Config::get('themer::themer.active_theme');
 				$theme = $this->getTheme($active_theme);
-				$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
+				// $this->app['view']->getFinder()->prependPath($theme->getViewLocation());
 				return $theme;
 			break;
 

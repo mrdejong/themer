@@ -11,6 +11,7 @@ class CreateThemesTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->integer('parent_id')->unsigned()->nullable();
+			$table->boolean('active')->default(false);
 		});
 	}
 

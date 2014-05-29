@@ -6,7 +6,7 @@ use Mrdejong\Themer\Model\Theme as ThemeModel;
 class Theme {
 	private $name;
 	private $location;
-	private $info;
+	private $info = array();
 	private $forced = false;
 
 	/**
@@ -23,11 +23,10 @@ class Theme {
 		$infoFile = $location . '/info.php';		
 
 		if(Config::get('themer::themer.require_info_file') && !file_exists($infoFile))
-		{
 			throw new Exception("Placeholder: Mrdejong\Themer\Theme.php 1st exception, function __construct");
-		}
 
-		$this->info = $this->validateInfo(include $infoFile);
+		if (file_exists($infoFile))
+			$this->info = $this->validateInfo(include $infoFile);
 	}
 
 	public function install()
@@ -38,7 +37,7 @@ class Theme {
 		$theme = new ThemeModel;
 
 		$theme->name = $this->name;
-		$theme->info = json_encode($this->info);
+		//$theme->info = json_encode($this->info);
 
 		if (isset($this->info['parent']))
 		{
@@ -49,11 +48,13 @@ class Theme {
 
 
 		}
+
+		$theme->save();
 	}
 
 	public function isInstalled()
 	{
-		return (ThemeModel::where('name', '=', $this->name)->count() > 0)) ? true : false;
+		return (ThemeModel::where('name', '=', $this->name)->count() > 0) ? true : false;
 	}
 
 	public function getModel()
