@@ -55,8 +55,6 @@ Thanks for reading this readme and  ignore my rich mistakes in this language!
 Have fun with themer, and watch out for new and super cool updates!
 
 ### License
-Since this project is under development I will not allow commercial use for the time being.
+Since it is written in laravel, I will use the very same license. It is nonsense to use anything different.
 
-[![license](http://i.creativecommons.org/l/by-nc/4.0/88x31.png)](http://creativecommons.org/licenses/by-nc/4.0/)
-
-Themer by Alexander de Jong is licensed under a Creative Commons Attribution-NonCommercial 4.0 International License.
+Licensed under the [Mit license](http://opensource.org/licenses/MIT)
