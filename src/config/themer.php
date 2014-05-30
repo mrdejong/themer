@@ -60,11 +60,6 @@ return array(
 	 */
 	'require_info_file'		=> false,
 
-	'database_loader'		=> array(
-		'table_name'			=> "",
-		'column_name_name'		=> "",
-	),
-
 	/**
 	 * Themer provides a build-in ajax api to activate/deactivate themes.
 	 * It also gives functionallity to get information of themes.
