@@ -22,8 +22,8 @@ return array(
 	 *
 	 * -1 - The configuration file is the only real deal, ignore the rest.
 	 * 0 - The one in the themes database table has the priority.
-	 * 1 - The one wich will be provided by an user. (In this case you 
-	 * 	   should configure the 'users' part in this configuration file).
+	 * 1 - The one which will be provided by an user. (In this case you 
+	 * 	   should configure the 'users' part in this configuration file). (Not implemented yet)
 	 */
 	'active_theme_priority'	=> 0,
 

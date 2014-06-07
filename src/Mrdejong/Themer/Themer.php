@@ -30,6 +30,14 @@ class Themer {
 		$this->activeThemes = new ActiveThemes();
 	}
 
+	public function inDevelopment(Theme $theme = null)
+	{
+		if ($theme)
+			return $theme->inDevelopment();
+
+		return $this->app['env'] == "local" || $this->app['env'] == "development";``
+	}
+
 	/**
 	 * Boot up themer, this method will be called in `filter.php`
 	 * inside the App::before callback.
