@@ -34,6 +34,10 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		{
 			return new Themer($app);
 		});
+        
+        $this->app->bindShared('themer.active_theme', function($app) {
+            return new ActiveThemes(); 
+        });
 
 		parent::register();
 	}
@@ -51,4 +55,14 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		});
 
 	}
+    
+    private function checkInstallation()
+    {
+        $providers = \Config::get('app.providers');
+        
+        if (in_array('Illuminate\View\ViewServiceProvider', $providers))
+        {
+            // Invalid installation
+        }
+    }
 }

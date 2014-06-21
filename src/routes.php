@@ -4,14 +4,12 @@
  * Routes for the themer api.
  */
 
-if (!Config::get('themer::themer.enable_api_routes'))
-	return; // To bad this option is disabled.
 
 Route::group(['prefix' => '{theme}/assets'], function($theme) {
 	
 });
 
-Route::group(['prefix' => 'themer/api', 'before' => 'is_ajax'], function() {
+$api_routes = function() {
 	Route::get('activate/{theme}', function($theme)
 	{
 		$theme = Themer::getTheme($theme);
@@ -43,4 +41,7 @@ Route::group(['prefix' => 'themer/api', 'before' => 'is_ajax'], function() {
 	{
 		return Response::json(Themer::getThemes());
 	});
-});
+};
+
+if (Config::get('themer::themer.enable_api_routes'))
+	Route::group(['prefix' => 'themer/api', 'before' => 'is_ajax'], $api_routes);

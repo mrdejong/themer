@@ -6,11 +6,11 @@
  * This will enable the user to activate a theme per route.
  *
  * @usage
- * array('before' => 'theme:themename,true') 
+ * array('before' => 'theme:{themename}') 
  */
-Route::filter('theme', function($route, $request, $name, $force = false)
-{
-	// Themer::activate($name, (bool)$force);
+Route::filter('theme', function($route, $request, $name)
+{    
+    Themer::activate($name, $route);
 });
 
 Route::filter('is_ajax', function($route, $request)

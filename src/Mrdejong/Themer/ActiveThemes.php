@@ -12,16 +12,9 @@ class ActiveThemes {
 		$this->list = $list;
 	}
 
-	public function append(Theme $item)
+	public function append($key, $item)
 	{
-		$this->list[] = $item;
-	}
-
-	public function prepand(Theme $item)
-	{
-		$new_list = array_merge(array($item), $this->list);
-
-		$this->list = $new_list;
+		$this->list[$key] = $item;
 	}
 
 	public function toArray()

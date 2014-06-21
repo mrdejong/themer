@@ -6,11 +6,19 @@ use Illuminate\View\FileViewFinder;
 use Cache;
 use Config;
 use Carbon\Carbon;
+use Session;
+use Route;
 
 /**
  * Lets manage those little suckers!!! uhhmm I ment themes...
  */
 class Themer {
+    /**
+     * Contains the string which tells the system to use laravels
+     * view folder in other to render the view/mail templates.
+     */
+    const VANILA_THEME          = "laravel_view_system";
+    
 	/**
 	 * Contains the laravel application instance
 	 */
@@ -23,6 +31,8 @@ class Themer {
 	 * @var array
 	 */
 	private $themes = array();
+    
+    private $active_theme = null;
 
 	public function __construct(Application $app)
 	{
@@ -35,7 +45,7 @@ class Themer {
 		if ($theme)
 			return $theme->inDevelopment();
 
-		return $this->app['env'] == "local" || $this->app['env'] == "development";``
+		return $this->app['env'] == "local" || $this->app['env'] == "development";
 	}
 
 	/**
@@ -47,17 +57,23 @@ class Themer {
 	public function boot(\Illuminate\Http\Request $request, $autoinstall = false)
 	{
 		$theme = $this->getActiveTheme();
-
+        
+        // Just see if we need to configure anything.
 		if ($theme === "laravel_view_system")
 			return;
-
+        
+        // Some programmers don't need this, so we'll need to think of something
+        // so they don't have to go through this if statement.
 		if ($autoinstall && !$theme->isInstalled())
 		{
 			$theme->install();
 		}
-
+        
 		if ($theme->isInstalled())
 		{
+            // Not really save, 'prependPath' is not a laravel provided function
+            // if a developer didn't install it right, this peace of code can
+            // crash the system. We'll have to think of something to prevent it!
 			$this->app['view']->getFinder()->prependPath($theme->getViewLocation());
 		}
 	}
@@ -86,6 +102,15 @@ class Themer {
 	public function getActiveTheme()
 	{
 		$priority = (int) Config::get('themer::themer.active_theme_priority');
+        
+        $a = $this->app['themer.active_theme'];
+        $active_themes = $a->toArray();
+        
+        foreach($active_themes as $name => $flags)
+        {
+            if (Route::current() == $flags['router'])
+                return $this->getTheme($name);
+        }
 
 		switch ($priority)
 		{
@@ -104,17 +129,17 @@ class Themer {
 						return $theme;
 				}				
 
-				return "laravel_view_system";
+				return Themer::VANILA_THEME;
 			break;
 
 			default:
 
 				// No active theme!
-				return "laravel_view_system";
+				return Themer::VANILA_THEME;
 			break;
 		}
 
-		return "laravel_view_system";
+		return Themer::VANILA_THEME;
 	}
 
 	/**
@@ -155,12 +180,22 @@ class Themer {
 	 * @param  boolean 		Force activation
 	 * @return void
 	 */
-	public function activate($name, $force = false)
+	public function activate($name, $router = false)
 	{
+        if ($router)
+        {
+            $a = $this->app['themer.active_theme'];
+            
+            $a->append($name, array('router' => $router));
+            
+            $this->reboot(true);
+            
+            return;
+        }
+        
 		$theme = $this->getTheme($name);
 		
 		$theme->activate();
-		$theme->setForced($force);
 
 		$this->reboot(true);
 	}

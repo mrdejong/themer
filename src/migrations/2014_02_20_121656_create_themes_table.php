@@ -12,6 +12,7 @@ class CreateThemesTable extends Migration {
 			$table->string('name');
 			$table->integer('parent_id')->unsigned()->nullable();
 			$table->boolean('active')->default(false);
+            $table->text('flags'); // json formatted
 		});
 	}
 

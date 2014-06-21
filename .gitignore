@@ -3,3 +3,7 @@ composer.phar
 composer.lock
 .DS_Store
 COMMIT_EDITMSG.COMMIT_EDITMSG
+phpunit.bat
+phpunit.sh
+phpunit
+art
