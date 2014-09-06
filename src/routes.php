@@ -22,7 +22,10 @@ $api_routes = function() {
 
 	Route::get('deactivate/{theme}', function($theme)
 	{
-		return App::abort(404);
+		$theme = Themer::getTheme($theme);
+		$theme->deactivate();
+
+		return Response::json(array('result' => 'success'));
 	});
 
 	Route::get('info/active-theme', function()
@@ -39,11 +42,23 @@ $api_routes = function() {
 		return Response::json($theme->getInfo());
 	});
 
-	Route::get('list', function()
+	Route::get('list/{with_info?}', function($withInfo = false)
 	{
-		return Response::json(Themer::getThemes());
+		$withInfo = ($withInfo) ? true : false;
+		$themes = Themer::getThemes();
+
+		$result = [];
+
+		foreach ($themes as $theme)
+		{
+			$result[] = $theme->toArray($withInfo);
+		}
+
+		return Response::json($result);
 	});
 };
 
 if (Config::get('themer::themer.enable_api_routes'))
-	Route::group(['prefix' => 'themer/api', 'before' => 'is_ajax'], $api_routes);
+{
+	Route::group(['prefix' => 'themer/api'], $api_routes);
+}

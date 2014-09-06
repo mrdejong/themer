@@ -47,6 +47,19 @@ class Theme {
 			$this->info = $this->validateInfo(include $infoFile);
 	}
 
+	public function toArray($withInfo = false)
+	{
+		$data = array(
+			'name'		=> $this->name,
+			'path'		=> $this->location
+		);
+
+		if ($withInfo)
+			$data['info'] = $this->info;
+
+		return $data;
+	}
+
 	/**
 	 * Register the theme in the database.
 	 */
@@ -168,6 +181,16 @@ class Theme {
 
 		$model = $this->getModel();
 		$model->active = true;
+		$model->save();
+	}
+
+	public function deactivate()
+	{
+		if (!$this->isInstalled())
+			return;
+
+		$model = $this->getModel();
+		$model->active = false;
 		$model->save();
 	}
 
