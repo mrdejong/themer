@@ -2,6 +2,7 @@
 
 use Config;
 use Mrdejong\Themer\Model\Theme as ThemeModel;
+use Mrdejong\Themer\Model\ThemeTimer;
 
 /**
  * This is a class wrapper for a single theme.
@@ -67,8 +68,18 @@ class Theme {
 
 			$theme->parent = $parent;
 		}
-
+		
 		$theme->save();
+
+		if (isset($this->info['activate_on']))
+		{
+			$timer = new ThemeTimer;
+			$timer->theme_id = $theme->id;
+			$timer->activate_on = $this->info['activate_on']['start'];
+			$timer->deactivate_on = $this->info['activate_on']['end'];
+			$timer->save();
+		}
+
 	}
 
 	/**

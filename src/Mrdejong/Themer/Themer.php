@@ -150,7 +150,8 @@ class Themer {
 	 */
 	public function getTheme($name)
 	{
-		return  new Theme($name);
+		$location = Config::get("themer::themer.themes_path") . '/' . $name;
+		return  new Theme($name, $location);
 	}
 
 	/**
@@ -198,6 +199,19 @@ class Themer {
 		$theme->activate();
 
 		$this->reboot(true);
+	}
+
+	public function deactivate($name)
+	{
+
+		$theme = $this->getTheme($name);
+
+		if ($theme->isInstalled())
+		{
+			$model = $theme->getModel();
+			$model->active = false;
+			$model->save();
+		}
 	}
 
 	/**

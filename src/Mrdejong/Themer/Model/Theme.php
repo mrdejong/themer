@@ -13,4 +13,9 @@ class Theme extends Eloquent {
 		return $this->belongsTo('Theme');
 	}
 
+	public function timed()
+	{
+		return $this->hasOne('Mrdejong\Themer\Model\ThemeTimer');
+	}
+
 }

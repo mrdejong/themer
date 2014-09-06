@@ -10,7 +10,7 @@ class ThemeTimer extends Eloquent {
 
 	public function theme()
 	{
-		return $this->belongsTo('Theme');
+		return $this->belongsTo('Mrdejong\Themer\Model\Theme');
 	}
 
 }

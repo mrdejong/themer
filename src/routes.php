@@ -5,8 +5,10 @@
  */
 
 
-Route::group(['prefix' => '{theme}/assets'], function($theme) {
-	
+Route::group(['prefix' => 'themer/assets'], function($theme) {
+	Route::get('css/{file}', function($file) {
+         
+    });
 });
 
 $api_routes = function() {
