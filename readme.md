@@ -1,3 +1,21 @@
+[ ![Codeship Status for mrdejong/themer](https://www.codeship.io/projects/c51cdeb0-248a-0132-ed0d-5e8cf715c71c/status)](https://www.codeship.io/projects/36903)
+
+## Important update
+As of today I'm rethinking Themer, how the project is going right now isn't the way I want to. It is to messy and the code ain't wunderfull. And testing is no where in side! That must change right now.
+
+First steps will be to write a simple list with features that I want.
+Second step is to delete all non required code.
+
+The new approuch I will adapt is write test first and then the implementation. Also I will try and stick to the scrum method of working on this and feature projects.
+
+Please be patient as I will take some time todo this.
+
+Thanks,
+
+Alexander.
+P.S. Any spelling mistakes made while writing this is because I don't re-read it :)
+
+
 ## Introducing Themer!
 
 Themer is a package that manages themes in laravel, the smart way!
