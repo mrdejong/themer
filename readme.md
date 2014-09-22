@@ -1,3 +1,5 @@
+[ ![Codeship Status for mrdejong/themer](https://www.codeship.io/projects/c51cdeb0-248a-0132-ed0d-5e8cf715c71c/status)](https://www.codeship.io/projects/36903)
+
 ## Important update
 As of today I'm rethinking Themer, how the project is going right now isn't the way I want to. It is to messy and the code ain't wunderfull. And testing is no where in side! That must change right now.
 
