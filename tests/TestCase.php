@@ -7,13 +7,15 @@ class TestCase extends PHPUnit_Framework_TestCase {
 	 *
 	 * @return \Symfony\Component\HttpKernel\HttpKernelInterface
 	 */
-	public function createApplication()
+	public function setUp()
 	{
+		parent::setUp();
 		$unitTesting = true;
 
 		$testEnvironment = 'testing';
 
 		// return require __DIR__.'/../../../../bootstrap/start.php';
+		require __DIR__.'/../vendor/autoload.php';
 	}
 
 	public function testTestCase()

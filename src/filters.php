@@ -21,5 +21,5 @@ Route::filter('is_ajax', function($route, $request)
 
 App::before(function($request)
 {
-	Themer::boot($request, true);
+	//Themer::boot($request, true);
 });

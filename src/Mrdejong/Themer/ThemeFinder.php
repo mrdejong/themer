@@ -1,8 +1,8 @@
 <?php namespace Mrdejong\Themer;
 
-use Config;
+use Illuminate\Support\Facades\Config;
 
-use Mrdejong\Themer\Exception\ThemeNotFoundException;
+use Mrdejong\Themer\Exceptions\ThemeNotFoundException;
 
 class ThemeFinder implements ThemeFinderInterface {
 	public function find($name)
@@ -15,6 +15,6 @@ class ThemeFinder implements ThemeFinderInterface {
 			throw new ThemeNotFoundException($name);
 		}
 
-		return $themePath;
+		return realpath($themePath);
 	}
 }
