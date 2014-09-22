@@ -24,27 +24,6 @@ class ThemerServiceProvider extends ViewServiceProvider {
 
 		include __DIR__.'/../../filters.php';
 		include __DIR__.'/../../routes.php';
-
-		$timers = ThemeTimer::all();
-
-		foreach ($timers as $timer)
-		{
-			$current = new \DateTime('now');
-			//$current->format('d-m-Y H:i');
-
-			//dd( new \DateTime($timer->deactivate_on) > $current);
-
-			//if (new \DateTime($timer->activate_on) < $current  && new \DateTime($timer->deactivate_on) > $current)
-			if ($current > new \DateTime($timer->activate_on && $current < new \DateTime($timer->deactivate_on)))
-			{
-				var_dump('activate');
-				$theme = $this->app['themer']->activate($timer->theme->name);
-			}
-			else
-			{
-				$this->app['themer']->deactivate($timer->theme->name);
-			}
-		}
 	}
 
 	/**
@@ -59,11 +38,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		{
 			return new Themer($app);
 		});
-        
-        $this->app->bindShared('themer.active_theme', function($app) {
-            return new ActiveThemes(); 
-        });
-
+		
 		parent::register();
 
 		$this->registered = true;
