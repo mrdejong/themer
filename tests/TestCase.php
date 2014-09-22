@@ -1,6 +1,6 @@
 <?php
 
-class TestCase extends Illuminate\Foundation\Testing\TestCase {
+class TestCase extends PHPUnit_Framework_TestCase {
 
 	/**
 	 * Creates the application.
@@ -13,7 +13,7 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 		$testEnvironment = 'testing';
 
-		return require __DIR__.'/../../../../bootstrap/start.php';
+		// return require __DIR__.'/../../../../bootstrap/start.php';
 	}
 
 	public function testTestCase()
@@ -23,9 +23,9 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase {
 
 	public function mock($class)
 	{
-		$mock = Mockery::mock($class);
+		/*$mock = Mockery::mock($class);
 		$this->app->instance($class, $mock);
-		return $mock;
+		return $mock;*/
 	}
 
 }
