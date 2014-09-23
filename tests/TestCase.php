@@ -1,5 +1,7 @@
 <?php
 
+use Mockery as m;
+
 class TestCase extends PHPUnit_Framework_TestCase {
 
 	/**
@@ -14,6 +16,13 @@ class TestCase extends PHPUnit_Framework_TestCase {
 
 		$testEnvironment = 'testing';
 
+		if (!is_dir(__DIR__.'/themes/default'))
+		{
+			mkdir(__DIR__.'/themes');
+			mkdir(__DIR__.'/themes/default');
+			touch(__DIR__.'/themes/default/hello.php');
+		}
+
 		// return require __DIR__.'/../../../../bootstrap/start.php';
 		require __DIR__.'/../vendor/autoload.php';
 	}
@@ -21,6 +30,16 @@ class TestCase extends PHPUnit_Framework_TestCase {
 	public function testTestCase()
 	{
 		$this->assertTrue(true);
+	}
+
+	public function tearDown()
+	{
+		parent::tearDown();
+		m::close();
+
+		unlink(__DIR__.'/themes/default/hello.php');
+		rmdir(__DIR__.'/themes/default');
+		rmdir(__DIR__.'/themes');
 	}
 
 	public function mock($class)

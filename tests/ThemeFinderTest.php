@@ -7,20 +7,11 @@ class ThemeFinderTest extends TestCase {
 	public function setUp()
 	{
 		parent::setUp();
-
-		if (!is_dir(__DIR__.'/themes/default'))
-		{
-			mkdir(__DIR__.'/themes');
-			mkdir(__DIR__.'/themes/default');
-		}
 	}
 
 	public function tearDown()
 	{
 		parent::tearDown();
-
-		rmdir(__DIR__.'/themes/default');
-		rmdir(__DIR__.'/themes');
 	}
 
 	public function testFindDefaultTheme()
