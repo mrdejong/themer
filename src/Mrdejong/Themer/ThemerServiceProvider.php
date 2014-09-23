@@ -6,7 +6,7 @@ use Illuminate\View\ViewServiceProvider;
 use Illuminate\View\ViewFinderInterface;
 use Illuminate\Support\ServiceProvider;
 
-use Mrdejong\Themer\Model\ThemeTimer;
+use Mrdejong\Themer\Commands\GenerateCommand;
 
 class ThemerServiceProvider extends ViewServiceProvider { 
 	protected $defer = false;
@@ -38,10 +38,21 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		{
 			return new Themer($app);
 		});
+
+		$this->registerGenerateCommand();
 		
 		parent::register();
 
 		$this->registered = true;
+	}
+
+	public function registerGenerateCommand()
+	{
+		$this->app['themer.generate.command'] = $this->app->share(function() {
+			return new GenerateCommand();
+		});
+
+		$this->commands('themer.generate.command');
 	}
 
 	/**

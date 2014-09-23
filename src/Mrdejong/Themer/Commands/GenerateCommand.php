@@ -4,6 +4,8 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
+use Mrdejong\Themer\Generator\ThemeGenerator;
+
 class GenerateCommand extends Command {
     protected $name = 'themer:generate';
     
@@ -11,13 +13,33 @@ class GenerateCommand extends Command {
     
     public function fire()
     {
-        
+        $includeResources = $this->option('resources');
+        $name = $this->argument('name');
+
+        $generator = new ThemeGenerator($name);
+        $generator->addOptional($includeResources);
+
+        try 
+        {
+            $generator->run();
+        }
+        catch(Exception $e)
+        {
+            $this->error($e->getMessage());
+        }
     }
     
     protected function getOptions()
     {
         return array(
-            ['resources', 'rs', InputOption::VALUE_OPTIONAL, 'Generates optional directories and files.']  
+            ['resources', null, InputOption::VALUE_NONE, 'Generates optional directories and files.']  
+        );
+    }
+
+    protected function getArguments()
+    {
+        return array(
+            ['name', InputArgument::REQUIRED, 'The name of the new theme']
         );
     }
 }
