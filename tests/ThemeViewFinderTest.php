@@ -14,13 +14,13 @@ class ThemeViewFinderTest extends TestCase {
 
 		$this->viewFinder = new Mrdejong\Themer\ThemeViewFinder(new Illuminate\Filesystem\Filesystem(), array(
 			__DIR__.'/themes/default',
-			__DIR__.'/../../../../app/views'
+			__DIR__.'/views'
 		));
 	}
 
 	public function testFallsBackToLaravel()
 	{
-		$this->assertTrue((realpath($this->viewFinder->find('login')) == realpath(__DIR__.'/../../../../app/views/login.php')));
+		$this->assertTrue((realpath($this->viewFinder->find('login')) == realpath(__DIR__.'/views/login.php')));
 	}
 
 	public function testFindsThemeView()

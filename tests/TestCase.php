@@ -23,6 +23,13 @@ class TestCase extends PHPUnit_Framework_TestCase {
 			touch(__DIR__.'/themes/default/hello.php');
 		}
 
+		// Create a laravel view folder (Just to test)
+		if (!is_dir(__DIR__.'/views'))
+		{
+			mkdir(__DIR__.'/views');
+			touch(__DIR__.'/views/login.php');
+		}
+
 		// return require __DIR__.'/../../../../bootstrap/start.php';
 		require __DIR__.'/../vendor/autoload.php';
 	}
@@ -40,6 +47,9 @@ class TestCase extends PHPUnit_Framework_TestCase {
 		unlink(__DIR__.'/themes/default/hello.php');
 		rmdir(__DIR__.'/themes/default');
 		rmdir(__DIR__.'/themes');
+
+		unlink(__DIR__.'/views/login.php');
+		rmdir(__DIR__.'/views');
 	}
 
 	public function mock($class)
