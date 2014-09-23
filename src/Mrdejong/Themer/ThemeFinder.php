@@ -36,7 +36,7 @@ class ThemeFinder implements ThemeFinderInterface {
 	 * 
 	 * @return array|null 	The directories listed in the themes folder.
 	 */
-	public function list()
+	public function listThemes()
 	{
 		$path = Config::get('themer::themer.themes_path');
 
