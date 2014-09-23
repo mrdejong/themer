@@ -10,7 +10,7 @@ use Session;
 use Route;
 
 /**
- * Lets manage those little suckers!!! uhhmm I ment themes...
+ * This class will provide basic controll over themes.
  */
 class Themer {
     
