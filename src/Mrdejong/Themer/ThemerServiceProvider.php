@@ -39,6 +39,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 			return new Themer($app);
 		});
 
+		$this->app->bindShared('themer.metadata', function($app)
+		{
+			return new MetaData();
+		});
+
 		$this->registerGenerateCommand();
 		
 		parent::register();

@@ -2,7 +2,7 @@
 
 use Mockery as m;
 
-class TestCase extends PHPUnit_Framework_TestCase {
+class TestCase extends Orchestra\Testbench\TestCase {
 
 	/**
 	 * Creates the application.
@@ -12,9 +12,6 @@ class TestCase extends PHPUnit_Framework_TestCase {
 	public function setUp()
 	{
 		parent::setUp();
-		$unitTesting = true;
-
-		$testEnvironment = 'testing';
 
 		if (!is_dir(__DIR__.'/themes/default'))
 		{
@@ -31,7 +28,7 @@ class TestCase extends PHPUnit_Framework_TestCase {
 		}
 
 		// return require __DIR__.'/../../../../bootstrap/start.php';
-		require __DIR__.'/../vendor/autoload.php';
+		// require __DIR__.'/../vendor/autoload.php';
 	}
 
 	public function testTestCase()
@@ -52,11 +49,30 @@ class TestCase extends PHPUnit_Framework_TestCase {
 		rmdir(__DIR__.'/views');
 	}
 
-	public function mock($class)
+	protected function getPackageProviders()
 	{
-		/*$mock = Mockery::mock($class);
-		$this->app->instance($class, $mock);
-		return $mock;*/
+		return array(
+			'Mrdejong\Themer\ThemerServiceProvider'
+		);
 	}
 
+	protected function getPackageAliases()
+	{
+		return array(
+			'Themer'		=> 'Mrdejong\Themer\Facades\Themer'
+		);
+	}
+}
+
+/**
+ * I know this file is not supposed to have this,
+ * but this needs a place somewhere.
+ */
+
+if (!function_exists('storage_path'))
+{
+	function storage_path()
+	{
+		return realpath(__DIR__ . '/../../../../app/storage');
+	}
 }
