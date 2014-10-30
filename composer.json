@@ -1,42 +1,25 @@
 {
     "name": "mrdejong/themer",
-    "description": "Theme package for laravel 4",
-    "version": "1.0.0-dev",
-    "type": "laravel-package",
-    "keywords": [
-        "laravel",
-        "laravel 4",
-        "laravel 4.1",
-        "laravel 4.2",
-        "theme",
-        "themes",
-        "theming",
-        "styling",
-        "css preprocessing",
-        "asset support"
-    ],
-    "license": "MIT",
+    "description": "",
     "authors": [
         {
-            "name": "Alexander de Jong (mrdejong)",
+            "name": "Alexander de Jong",
             "email": "mrdejong89@gmail.com"
         }
     ],
-    "suggest": {
-        "codesleeve/asset-pipeline": "Enables the asset support in themer"  
-    },
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.x"
+        "illuminate/support": "4.2.*"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.1.3",
-        "mockery/mockery": "0.8.0",
-        "orchestra/testbench": "2.2.*"
+        "illuminate/view": "4.2.*"
     },
     "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
         "psr-0": {
-            "Mrdejong\\Themer": "src/"
+            "Mrdejong\\Themer\\": "src/"
         }
     },
     "minimum-stability": "stable"
