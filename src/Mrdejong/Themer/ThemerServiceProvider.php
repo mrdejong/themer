@@ -1,6 +1,7 @@
 <?php namespace Mrdejong\Themer;
 
 use Illuminate\View\ViewServiceProvider;
+use Mrdejong\Themer\Finder\ThemeViewFinder;
 
 class ThemerServiceProvider extends ViewServiceProvider {
 	/**
@@ -20,7 +21,18 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function register()
 	{
+		$this->registerThemer();
+
 		parent::register();
+	}
+
+	public function registerThemer()
+	{
+		$this->app->bindShared('themer', function($app) {
+			$path = $app['config']['themer::themer.themes_path'];
+
+			return new Themer($path);
+		});
 	}
 
 	/**
@@ -39,9 +51,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	{
 		$this->app->bindShared('view.finder', function($app) {
 			$view_paths = $app['config']['view.paths'];
+			$theme_path = $app['themer']->getActiveThemeViewFolder();
 
-			// Don't you worry reader, I will be changing this one very very very soon!
-			return new FileViewFinder($app['files'], $view_paths);
+			$paths = array_merge($theme_path, $view_paths);
+			
+			return new ThemeViewFinder($app['files'], $paths);
 		});
 	}
 
