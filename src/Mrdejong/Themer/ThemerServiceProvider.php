@@ -1,7 +1,9 @@
 <?php namespace Mrdejong\Themer;
 
 use Illuminate\View\ViewServiceProvider;
+use Illuminate\Foundation\Application;
 use Mrdejong\Themer\Finder\ThemeViewFinder;
+use Mrdejong\Themer\Parser\MetaParser;
 
 class ThemerServiceProvider extends ViewServiceProvider {
 	/**
@@ -11,6 +13,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function boot()
 	{
+		if (self::isVersion(5))
+		{
+			throw new \Exception("Laravel 5 is not yet supported.");
+		}
+
 		$this->package('mrdejong/themer');
 	}
 
@@ -29,9 +36,13 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	public function registerThemer()
 	{
 		$this->app->bindShared('themer', function($app) {
-			$path = $app['config']['themer::themer.themes_path'];
+			if (self::isVersion(4))
+			{
+				// Laravel version 4
+				$path = $app['config']['themer::themer.themes_path.laravel4'];
+			}
 
-			return new Themer($path);
+			return new Themer($app, $path);
 		});
 	}
 
@@ -54,7 +65,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 			$theme_path = $app['themer']->getActiveThemeViewFolder();
 
 			$paths = array_merge($theme_path, $view_paths);
-			
+
 			return new ThemeViewFinder($app['files'], $paths);
 		});
 	}
@@ -69,4 +80,13 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		return array();
 	}
 
+	/**
+	 * Checks the laravel version, this is done via the major version number.
+	 *
+	 * @param int $version The major of the version you want to compare.
+	 */
+	public static function isVersion($version)
+	{
+		return (version_compare(Application::VERSION, $version . '.0.0', '>=') && version_compare(Application::VERSION, $version+1 . '.0.0', '<'));
+	}
 }
