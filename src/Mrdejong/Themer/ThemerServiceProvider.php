@@ -33,6 +33,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		parent::register();
 	}
 
+	/**
+	 * Register themer master class.
+	 *
+	 * @return void
+	 */
 	public function registerThemer()
 	{
 		$this->app->bindShared('themer', function($app) {
