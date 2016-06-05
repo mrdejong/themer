@@ -20,7 +20,9 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('mrdejong/themer');
+    $this->publishes([
+      __DIR__.'/../../config/themer.php' => config_path('themer.php')
+    ]);
 
 		include __DIR__.'/../../filters.php';
 		include __DIR__.'/../../routes.php';
