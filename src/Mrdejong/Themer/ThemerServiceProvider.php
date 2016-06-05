@@ -8,14 +8,14 @@ use Illuminate\Support\ServiceProvider;
 
 use Mrdejong\Themer\Commands\GenerateCommand;
 
-class ThemerServiceProvider extends ViewServiceProvider { 
+class ThemerServiceProvider extends ViewServiceProvider {
 	protected $defer = false;
 
 	private $registered = false;
 
 	/**
 	 * Put on a package name!
-	 * 
+	 *
 	 * @return void
 	 */
 	public function boot()
@@ -47,8 +47,10 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		});
 
 		$this->registerGenerateCommand();
-		
+
 		parent::register();
+
+    // $this->registerThemeViewPaths();
 
 		$this->registered = true;
 	}
@@ -81,11 +83,11 @@ class ThemerServiceProvider extends ViewServiceProvider {
 		});
 
 	}
-    
+
     private function checkInstallation()
     {
-        $providers = \Config::get('app.providers');
-        
+        $providers = config('app.providers');
+
         if (in_array('Illuminate\View\ViewServiceProvider', $providers))
         {
             // Invalid installation
