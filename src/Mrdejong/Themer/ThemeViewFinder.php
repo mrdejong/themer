@@ -13,7 +13,7 @@ class ThemeViewFinder extends FileViewFinder {
 
 	/**
 	 * Prepands a path/paths to the array of paths which is used to look up view files.
-	 * 
+	 *
 	 * @param string|array  	$path 		A path to a folder containing views.
 	 * @return void
 	 */
