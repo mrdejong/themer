@@ -29,6 +29,6 @@ class ThemeViewFinder extends FileViewFinder {
 	 */
 	public function resetPaths()
 	{
-		$this->paths = \Config::get('view.paths');
+		$this->paths = config('view.paths');
 	}
 }
