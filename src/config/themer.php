@@ -20,9 +20,9 @@ return array(
 	/**
 	 * Themer provides a build-in ajax api to activate/deactivate themes.
 	 * It also gives functionallity to get information of themes.
-	 * 
+	 *
 	 * This is handy in an ajax based backend application.
-	 * 
+	 *
 	 * This way you only have to provide the front-end functionallity.
 	 */
 	'enable_api_routes'		=> true
