@@ -34,12 +34,12 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app->bindShared('themer', function($app)
+		$this->app->bind('themer', function($app)
 		{
 			return new Themer($app);
 		});
 
-		$this->app->bindShared('themer.metadata', function($app)
+		$this->app->bind('themer.metadata', function($app)
 		{
 			return new MetaData();
 		});
@@ -67,7 +67,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	 */
 	public function registerViewFinder()
 	{
-		$this->app->bindShared('view.finder', function($app)
+		$this->app->bind('view.finder', function($app)
 		{
 			return new ThemeViewFinder($app['files'], $app['config']['view.paths']);
 		});
