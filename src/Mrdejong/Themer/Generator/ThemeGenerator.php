@@ -1,6 +1,5 @@
 <?php namespace Mrdejong\Themer\Generator;
 
-use Illuminate\Support\Facades\Config;
 use Mrdejong\Themer\Exceptions\ThemeExistsException;
 
 class ThemeGenerator {
@@ -11,7 +10,7 @@ class ThemeGenerator {
 	public function __construct($name)
 	{
 		$this->name = $name;
-		$this->themePath = Config::get('themer::themer.themes_path');
+		$this->themePath = config('themer.themes_path');
 
 		$this->themeExists($name); // check right away. It'll throw an exception when it exists
 	}
@@ -27,14 +26,16 @@ class ThemeGenerator {
 
 		if ($required == 'required')
 		{
-			mkdir($this->themePath . (($in != "") ? '/' . $in : '') . '/' . $this->parseVariable($key));
+      $newDir = $this->themePath . (($in != "") ? '/' . $in : '') . '/' . $this->parseVariable($key);
+			mkdir($newDir);
 			return true;
 		}
 		else
 		{
 			if ($this->optional)
 			{
-				mkdir($this->themePath . (($in != "") ? '/' . $in : '') . '/' . $this->parseVariable($key));
+        $newDir = $this->themePath . (($in != "") ? '/' . $in : '') . '/' . $this->parseVariable($key);
+				mkdir($newDir);
 				return true;
 			}
 		}
