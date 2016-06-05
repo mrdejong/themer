@@ -5,11 +5,11 @@ return array(
 	 * Describe the location where the themes can be found.
 	 */
 	'themes_path'		=> app_path().'/themes',
-    
-    /**
-     * The path where composer installs packages.
-     */
-    'vendor_path'       => base_path().'/vendor',
+
+  /**
+   * The path where composer installs packages.
+   */
+  'vendor_path'       => base_path().'/vendor',
 
 	/**
 	 * The directory name of the default theme.
