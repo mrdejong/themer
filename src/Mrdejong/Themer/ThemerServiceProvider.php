@@ -69,7 +69,13 @@ class ThemerServiceProvider extends ViewServiceProvider {
 	{
 		$this->app->bind('view.finder', function($app)
 		{
-			return new ThemeViewFinder($app['files'], $app['config']['view.paths']);
+      $finder = new ThemeFinder();
+      $theme = $finder->find(config('themer.active_theme'));
+      $theme .= '/views';
+
+			$viewFinder = new ThemeViewFinder($app['files'], $app['config']['view.paths']);
+      $viewFinder->prepandLocation($theme);
+      return $viewFinder;
 		});
 
 	}
