@@ -1,7 +1,7 @@
 {
     "name": "mrdejong/themer",
     "description": "Theme package for laravel 5",
-    "version": "2.0.0-dev",
+    "version": "2.0.0",
     "type": "laravel-package",
     "keywords": [
         "laravel",
