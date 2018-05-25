@@ -26,9 +26,6 @@ class TestCase extends Orchestra\Testbench\TestCase {
 			mkdir(__DIR__.'/views');
 			touch(__DIR__.'/views/login.php');
 		}
-
-		// return require __DIR__.'/../../../../bootstrap/start.php';
-		// require __DIR__.'/../vendor/autoload.php';
 	}
 
 	public function testTestCase()
@@ -61,18 +58,5 @@ class TestCase extends Orchestra\Testbench\TestCase {
 		return array(
 			'Themer'		=> 'Mrdejong\Themer\Facades\Themer'
 		);
-	}
-}
-
-/**
- * I know this file is not supposed to have this,
- * but this needs a place somewhere.
- */
-
-if (!function_exists('storage_path'))
-{
-	function storage_path()
-	{
-		return realpath(__DIR__ . '/../../../../app/storage');
 	}
 }
