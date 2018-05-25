@@ -46,14 +46,14 @@ class TestCase extends Orchestra\Testbench\TestCase {
 		rmdir(__DIR__.'/views');
 	}
 
-	protected function getPackageProviders()
+	protected function getPackageProviders($app)
 	{
 		return array(
 			'Mrdejong\Themer\ThemerServiceProvider'
 		);
 	}
 
-	protected function getPackageAliases()
+	protected function getPackageAliases($app)
 	{
 		return array(
 			'Themer'		=> 'Mrdejong\Themer\Facades\Themer'
