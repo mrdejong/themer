@@ -40,9 +40,6 @@ class TestCase extends Orchestra\Testbench\TestCase {
 
 	public function tearDown()
 	{
-		parent::tearDown();
-		m::close();
-
 		unlink(__DIR__.'/themes/default/hello.php');
 		rmdir(__DIR__.'/themes/default');
 		rmdir(__DIR__.'/themes');
@@ -52,6 +49,11 @@ class TestCase extends Orchestra\Testbench\TestCase {
 
 		unlink(storage_path().'/meta/themer.json');
 		rmdir(storage_path().'/meta');
+
+		m::close();
+
+		parent::tearDown();
+	}
 	}
 
 	protected function getPackageProviders($app)
