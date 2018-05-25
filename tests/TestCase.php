@@ -20,6 +20,11 @@ class TestCase extends Orchestra\Testbench\TestCase {
 			touch(__DIR__.'/themes/default/hello.php');
 		}
 
+		if (!is_dir(storage_path().'/meta')) {
+			mkdir(storage_path().'/meta');
+			file_put_contents(storage_path().'/meta/themer.json', json_encode(['default.theme' => 'default']));
+		}
+
 		// Create a laravel view folder (Just to test)
 		if (!is_dir(__DIR__.'/views'))
 		{
@@ -44,6 +49,9 @@ class TestCase extends Orchestra\Testbench\TestCase {
 
 		unlink(__DIR__.'/views/login.php');
 		rmdir(__DIR__.'/views');
+
+		unlink(storage_path().'/meta/themer.json');
+		rmdir(storage_path().'/meta');
 	}
 
 	protected function getPackageProviders($app)
