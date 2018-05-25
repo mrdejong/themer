@@ -54,7 +54,6 @@ class TestCase extends Orchestra\Testbench\TestCase {
 
 		parent::tearDown();
 	}
-	}
 
 	protected function getPackageProviders($app)
 	{
