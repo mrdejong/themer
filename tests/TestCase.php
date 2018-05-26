@@ -22,7 +22,11 @@ class TestCase extends Orchestra\Testbench\TestCase {
 
 		if (!is_dir(storage_path().'/meta')) {
 			mkdir(storage_path().'/meta');
-			file_put_contents(storage_path().'/meta/themer.json', json_encode(['default.theme' => 'default']));
+			file_put_contents(storage_path().'/meta/themer.json', json_encode([
+				'default' => [
+					'theme' => 'default'
+				]]
+			));
 		}
 
 		// Create a laravel view folder (Just to test)
