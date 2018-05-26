@@ -24,7 +24,7 @@
         "codesleeve/asset-pipeline": "Enables the asset support in themer"
     },
     "require": {
-        "php": ">=5.2.0",
+        "php": ">=5.5.0",
         "illuminate/support": "5.2.x"
     },
     "require-dev": {
