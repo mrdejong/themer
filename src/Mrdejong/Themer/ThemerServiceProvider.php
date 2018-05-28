@@ -57,7 +57,7 @@ class ThemerServiceProvider extends ViewServiceProvider {
 
 	public function registerGenerateCommand()
 	{
-		$this->app['themer.generate.command'] = $this->app->share(function() {
+		$this->app->bind('themer.generate.command', function($app) {
 			return new GenerateCommand();
 		});
 
