@@ -11,7 +11,7 @@ class GenerateCommand extends Command {
     
     protected $description = "Generate theme directory structure";
     
-    public function fire()
+    public function handle()
     {
         $includeResources = $this->option('resources');
         $name = $this->argument('name');
