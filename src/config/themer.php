@@ -4,7 +4,7 @@ return array(
 	/**
 	 * Describe the location where the themes can be found.
 	 */
-	'themes_path'		=> app_path().'/themes',
+	'themes_path'		=> resource_path().'/themes',
 
   /**
    * The path where composer installs packages.
