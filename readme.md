@@ -3,7 +3,7 @@
 [![License](https://poser.pugx.org/mrdejong/themer/license.svg)](https://packagist.org/packages/mrdejong/themer)
 
 ## Important update
-This project will be brought back to life as soon as laravel 5 has a stable release.
+I'm no longer working on the project. If you want to continue this project contact me for a transfer!
 
 ### Introduction
 
